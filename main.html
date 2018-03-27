@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<?php
+if(!isset($_POST["username"])) {
+    header("Location: index.html");
+    die("You must set a username first");
+}
+
+//echo "UN:" . $_POST["username"]
+?>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+function httpGet(theUrl)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
+
+function stripHTML(dirtyString) {
+  var container = document.createElement('div');
+  var text = document.createTextNode(dirtyString);
+  container.appendChild(text);
+  return container.innerHTML; // innerHTML will be a xss safe string
+}
+
+function sendMessage() {
+    var msg = $('#send_box').val();
+    //alert(msg);
+    console.log("Sending " + msg)
+    r = httpGet("https://ben.mctrees.net/msg/api.php?q=send&c=" + msg + "&a=<?php echo $_POST["username"]?>");
+    console.log(r);
+    $('#send_box').val("");
+    updateMessages();
+}
+
+function error(err) {
+    alert(err);
+}
+
+function updateMessages() {
+    r = httpGet("https://ben.mctrees.net/msg/api.php?q=get");
+    $('#messages').text("");
+    r = r.split("<br />");
+    r.pop()
+    r.forEach(function (message) {
+        message = message.split(";")
+        $('#messages').append('<article class="media"> <figure class="media-left"> </figure> <div class="media-content"> <div class="content"> <p> <strong>' + stripHTML(message[0]) + '</strong> <br> ' + stripHTML(message[1]) + ' </p> </div> <nav class="level is-mobile"> <div class="level-left"> <a class="level-item"> <span class="icon is-small"><i class="fas fa-reply"></i></span> </a> <a class="level-item"> <span class="icon is-small"><i class="fas fa-retweet"></i></span> </a> <a class="level-item"> <span class="icon is-small"><i class="fas fa-heart"></i></span> </a> </div> </nav> </div> </article>')
+    });
+    //$('#messages').text(r)
+}
+
+
+//Get messages on page load
+$( document ).ready(function() {
+    updateMessages();
+    window.setInterval(function(){
+      updateMessages();
+    }, 100);
+});
+
+
+</script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css" />
+<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+<style>
+#messages {
+    top: 50px;
+}
+@keyframes name {
+	0% {
+		color: #0f0;
+		transform: rotate(30deg);
+	}
+	50% {
+		color: #00f;
+		transform: rotate(-30deg);
+	}
+	100% {
+		color: #0f0;
+		transform: rotate(30deg);
+	}
+}
+</style>
+<center>
+<section class="hero is-primary">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        Welcome to da chat, <?php echo $_POST["username"]?>!
+      </h1>
+      <h2 class="subtitle">
+        Send your messages below.
+      </h2>
+    </div>
+  </div>
+</section>
+<!--<h1 id=title></h1>-->
+
+<div id="send_msg_box">
+<h4>Send a message</h4>
+<div id="bottom_box">
+<input type=text id=send_box />
+<button onclick="sendMessage();" id="send">Go, boii</button>
+<script>
+var sb = document.getElementById("send_box");
+sb.addEventListener("keydown", function (e) {
+    if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
+        sendMessage();
+    }
+});
+</script>
+</div>
+</div>
+
+
+<p class="MessageBox container is-fluid" id="messages">
+
+</p>
+
+
+
+<script>
+//$( "#send" ).click(function() {
+    //alert("Skidoo skidayy your mum is now gay");
+//});
+</center>
