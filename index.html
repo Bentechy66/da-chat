@@ -1,6 +1,46 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css" />
+<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+<section class="hero is-medium is-primary is-bold">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        Enter a name below, and enter the chatroom
+      </h1>
+      <h2 class="subtitle">
+        It's that easy.
+      </h2>
+    </div>
+  </div>
+</section>
+
 <center>
-<h1>Enter a name below, and enter the chatroom</h1>
-<form action="main.html" method="post">
-<input type="text" name="username" required />
-<button>Enter</button>
+<!--<h1></h1>-->
+<br />
+<br />
+<br />
+<div class="has-text-centered">
+<form id="enter-chatroom" action="main.html" method="post">
+<div class="field has-addons is-centered">
+  <div class="control">
+    <input class="input is-large is-centered" type="text" name="username" placeholder="username" required />
+  </div>
+  <div class="control">
+    <a id="enter-chatroom-buttn" class="is-centered button is-info is-large">
+      Enter
+    </a>
+  </div>
+</div>
+<!--<button>Enter</button>-->
 </form>
+</div>
+
+<script>
+var form = document.getElementById("enter-chatroom");
+
+document.getElementById("enter-chatroom-buttn").addEventListener("click", function () {
+  form.submit();
+});
+</script>
